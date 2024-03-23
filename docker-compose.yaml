@@ -57,6 +57,19 @@ services:
         networks:
             - app_network
 
+    product_app_mongo:
+      container_name: product_app_mongo
+      image: mongo:latest
+      restart: always
+      volumes:
+        - ./data/mongo:/data/db
+      ports:
+        - 27017:27017
+      environment:
+        MONGO_INITDB_DATABASE: product_app
+      networks:
+        - app_network
+
 networks:
     app_network:
         driver: bridge
