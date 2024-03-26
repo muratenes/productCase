@@ -3,16 +3,15 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use MongoDB\Laravel\Eloquent\Model;
 
 class Order extends Model
 {
     use HasFactory;
+    protected $guarded = ['id'];
+    public $timestamps = true;
 
+    protected $connection = 'mongodb';
+    protected $collection = 'z';
 
-    public function address(): BelongsTo
-    {
-        return $this->belongsTo(Address::class);
-    }
 }

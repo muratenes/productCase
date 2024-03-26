@@ -8,7 +8,7 @@ RUN curl -s -f -L -o /tmp/dockerize.tar.gz https://github.com/jwilder/dockerize/
     && rm /tmp/dockerize.tar.gz
 
 # Install Composer
-ENV COMPOSER_VERSION 2.1.5
+ENV COMPOSER_VERSION 2.4.1
 
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer --version=$COMPOSER_VERSION
 
@@ -18,7 +18,9 @@ RUN curl -sL https://deb.nodesource.com/setup_14.x | bash
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
         libz-dev \
+        libsasl2-dev \
         libpq-dev \
+        pkg-config \
         libjpeg-dev \
         libpng-dev \
         libssl-dev \
@@ -28,6 +30,7 @@ RUN apt-get update \
         nodejs \
     && apt-get clean \
     && pecl install redis \
+    && pecl install mongodb \
     && docker-php-ext-configure gd \
     && docker-php-ext-configure zip \
     && docker-php-ext-install \
@@ -39,7 +42,7 @@ RUN apt-get update \
         pgsql \
         pcntl \
         zip \
-    && docker-php-ext-enable redis \
+    && docker-php-ext-enable redis mongodb \
     && rm -rf /var/lib/apt/lists/*;
 
 COPY ./docker/php/laravel.ini /usr/local/etc/php/conf.d/laravel.ini
