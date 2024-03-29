@@ -12,6 +12,6 @@ class Order extends Model
     public $timestamps = true;
 
     protected $connection = 'mongodb';
-    protected $collection = 'z';
+    protected $collection = 'sell_orders';
 
 }

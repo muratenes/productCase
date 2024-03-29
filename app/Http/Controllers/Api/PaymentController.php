@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Exceptions\ValidationException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\PaymentStoreRequest;
 use App\Services\Payment\Payment;
-use Illuminate\Http\Request;
 
 class PaymentController extends Controller
 {
@@ -19,9 +19,10 @@ class PaymentController extends Controller
 
     /**
      * Store a newly created resource in storage.
+     * @throws ValidationException
      */
     public function store(PaymentStoreRequest $request, Payment $payment)
     {
-        $result = $payment->pay($request->paymentData);
+        return $payment->pay($request->paymentData);
     }
 }

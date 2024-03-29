@@ -9,14 +9,33 @@ use Illuminate\Support\Facades\Redis;
 
 class ProductInStock extends Middleware
 {
+    const PRODUCT_IN_STOCK_FORMAT = "products:%s:allocate:controller:user:%s";
+    const EXPIRE_TIME = 30;
+
     public function check(PaymentData $paymentData)
     {
-        $soldCount = Redis::get('product:stock:' . $paymentData->getProduct()->id) ?? 0;
+        $paymentData->setProduct(
+            Product::lockForUpdate()->find($paymentData->getExtra("product_id"))
+        );
 
-        if ($paymentData->getQuantity() > ($paymentData->getProduct()->quantity - $soldCount)) {
+        $productAllocateKey = self::getProductCacheKey($paymentData, $paymentData->getUser()->id);
+        $allocatedProductCount = count(Redis::keys(
+            sprintf(self::PRODUCT_IN_STOCK_FORMAT, $paymentData->getProduct()->id, "*")
+        ));
+
+        if ($paymentData->getQuantity() > ($paymentData->getProduct()->stock - $allocatedProductCount)) {
             throw new ValidationException("There is no stock for this product.");
         }
 
+        Redis::set($productAllocateKey, 1);
+        Redis::expire($productAllocateKey, self::EXPIRE_TIME);
+
         return $paymentData;
+    }
+
+
+    public static function getProductCacheKey(PaymentData $paymentData, string $userKey = '*'): string
+    {
+        return sprintf(self::PRODUCT_IN_STOCK_FORMAT, $paymentData->getProduct()->id, $userKey);
     }
 }

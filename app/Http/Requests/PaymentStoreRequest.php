@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use App\Models\Address;
 use App\Models\Product;
+use App\Models\User;
 use App\Services\Payment\Models\PaymentData;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -37,9 +38,10 @@ class PaymentStoreRequest extends FormRequest
     public function passedValidation()
     {
         $this->paymentData = (new PaymentData())
-            ->setProduct(Product::find($this->product_id))
             ->setQuantity($this->quantity)
+            ->setUser(User::find(random_int(1,3))) // todo : change with auth user
             ->setPaymentMethod($this->payment_method)
+            ->setExtra($this->validated())
             ->setAddress(Address::find($this->address));
     }
 }

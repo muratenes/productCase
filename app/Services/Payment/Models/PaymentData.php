@@ -9,9 +9,10 @@ use App\Models\User;
 class PaymentData
 {
     private Product $product;
-    private User $user;
+    private ?User $user = null;
     private ?Address $address = null;
     private string $paymentMethod;
+    private array $extra;
 
     private int $quantity;
 
@@ -26,14 +27,15 @@ class PaymentData
         return $this;
     }
 
-    public function getUser(): User
+    public function getUser(): ?User
     {
         return $this->user;
     }
 
-    public function setUser(User $user): void
+    public function setUser(User $user): self
     {
         $this->user = $user;
+        return  $this;
     }
 
     public function getAddress(): ?Address
@@ -66,6 +68,20 @@ class PaymentData
     public function setPaymentMethod(string $paymentMethod): self
     {
         $this->paymentMethod = $paymentMethod;
+        return $this;
+    }
+
+    public function getExtra(string $key = null): mixed
+    {
+        if ($key) {
+            return $this->extra[$key] ?? null;
+        }
+        return $this->extra;
+    }
+
+    public function setExtra(array $extra): self
+    {
+        $this->extra = $extra;
         return $this;
     }
 }
