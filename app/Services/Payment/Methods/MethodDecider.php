@@ -11,6 +11,7 @@ class MethodDecider
     {
         $method = match ($type) {
             'credit_card' => new CreditCardPayment(),
+            'paypal' => new PaypalPayment(),
             default => null
         };
 

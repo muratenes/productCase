@@ -17,7 +17,8 @@ class Result implements \JsonSerializable
             'user' => [
                 'id' => $user->id,
                 'email' => $user->email
-            ]
+            ],
+            'product' => $this->paymentData->getProduct()
         ];
     }
 

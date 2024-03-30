@@ -17,10 +17,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-//Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-//    return $request->user();
-//});
-// public routes
+
 Route::post('/auth/login', [AuthController::class, 'login'])->name('api.auth.login');
 Route::post('/auth/register', [AuthController::class, 'register'])->name('api.auth.register');
 
@@ -28,11 +25,12 @@ Route::middleware('auth:api')->group(function () {
     Route::prefix('payments')->group(function () {
         Route::post('', [PaymentController::class, 'store']);
     });
+});
 
-    Route::prefix('products')->group(function () {
-        Route::get('', [ProductController::class, 'index']);
-        Route::get('/{product:id}', [ProductController::class, 'show']);
-    });
+// these route can be added to auth
+Route::prefix('products')->group(function () {
+    Route::get('', [ProductController::class, 'index']);
+    Route::get('/{product:id}', [ProductController::class, 'show']);
 });
 
 
