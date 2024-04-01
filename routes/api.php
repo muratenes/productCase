@@ -30,7 +30,7 @@ Route::middleware('auth:api')->group(function () {
 // these route can be added to auth
 Route::prefix('products')->group(function () {
     Route::get('', [ProductController::class, 'index']);
-    Route::get('/{product:id}', [ProductController::class, 'show']);
+    Route::get('/{id}', [ProductController::class, 'show']);
 });
 
 
