@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Redis;
 
 class ProductInStock extends Middleware
 {
-    const PRODUCT_IN_STOCK_FORMAT = "products:%s:allocate:controller:user:%s";
+    const PRODUCT_IN_STOCK_FORMAT = "products:%s:allocate:user:%s";
     const EXPIRE_TIME = 30;
 
     public function check(PaymentData $paymentData)
